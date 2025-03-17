@@ -1,5 +1,6 @@
 import UIKit
 import FirebaseAuth
+import FirebaseCore
 
 final class ProfileController: UIViewController {
     private let profileView = ProfileView()

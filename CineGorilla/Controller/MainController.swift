@@ -1,5 +1,6 @@
 import UIKit
 import FirebaseAuth
+import FirebaseCore
 
 class MainController: UIViewController {
     

@@ -1,6 +1,6 @@
 import UIKit
-import FirebaseCore
 import FirebaseAuth
+import FirebaseCore
 import CoreData
 
 @main

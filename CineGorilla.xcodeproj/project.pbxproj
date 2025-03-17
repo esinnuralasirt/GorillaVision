@@ -7,47 +7,84 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		307449CC2D834DE5001CA6B7 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 307449CB2D834DE5001CA6B7 /* FirebaseAuth */; };
-		307449CE2D834DE6001CA6B7 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 307449CD2D834DE6001CA6B7 /* FirebaseCore */; };
-		8946E0CB95DB073FA51B7FC0 /* Pods_CineGorilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43139CAFBC27FD50B493D809 /* Pods_CineGorilla.framework */; };
+		309B567D2D888D64008D5F82 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 309B567C2D888D64008D5F82 /* FirebaseAuth */; };
+		309B567F2D888D64008D5F82 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 309B567E2D888D64008D5F82 /* FirebaseCore */; };
+		30B61B482D8888BE00876CE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30B61B402D8888BE00876CE8 /* Assets.xcassets */; };
+		30B61B492D8888BE00876CE8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30B61B412D8888BE00876CE8 /* GoogleService-Info.plist */; };
+		30B61B4B2D8888BE00876CE8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30B61B442D8888BE00876CE8 /* LaunchScreen.storyboard */; };
+		30B61B4C2D8888BE00876CE8 /* AuthorizationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B222D8888BE00876CE8 /* AuthorizationController.swift */; };
+		30B61B4D2D8888BE00876CE8 /* CertainTicketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B232D8888BE00876CE8 /* CertainTicketController.swift */; };
+		30B61B4E2D8888BE00876CE8 /* FavoriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B242D8888BE00876CE8 /* FavoriteController.swift */; };
+		30B61B4F2D8888BE00876CE8 /* HistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B252D8888BE00876CE8 /* HistoryController.swift */; };
+		30B61B502D8888BE00876CE8 /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B262D8888BE00876CE8 /* MainController.swift */; };
+		30B61B512D8888BE00876CE8 /* MyTicketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B272D8888BE00876CE8 /* MyTicketController.swift */; };
+		30B61B522D8888BE00876CE8 /* NewTicketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B282D8888BE00876CE8 /* NewTicketController.swift */; };
+		30B61B532D8888BE00876CE8 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B292D8888BE00876CE8 /* ProfileController.swift */; };
+		30B61B542D8888BE00876CE8 /* PushController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B2A2D8888BE00876CE8 /* PushController.swift */; };
+		30B61B552D8888BE00876CE8 /* WelcomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B2B2D8888BE00876CE8 /* WelcomeController.swift */; };
+		30B61B562D8888BE00876CE8 /* FilmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B2D2D8888BE00876CE8 /* FilmModel.swift */; };
+		30B61B572D8888BE00876CE8 /* TicketModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B2E2D8888BE00876CE8 /* TicketModel.swift */; };
+		30B61B582D8888BE00876CE8 /* FilmCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B302D8888BE00876CE8 /* FilmCell.swift */; };
+		30B61B592D8888BE00876CE8 /* TicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B312D8888BE00876CE8 /* TicketCell.swift */; };
+		30B61B5A2D8888BE00876CE8 /* UsedTicketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B322D8888BE00876CE8 /* UsedTicketCell.swift */; };
+		30B61B5B2D8888BE00876CE8 /* AuthorizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B342D8888BE00876CE8 /* AuthorizationView.swift */; };
+		30B61B5C2D8888BE00876CE8 /* CertainTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B352D8888BE00876CE8 /* CertainTicketView.swift */; };
+		30B61B5D2D8888BE00876CE8 /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B362D8888BE00876CE8 /* FavoriteView.swift */; };
+		30B61B5E2D8888BE00876CE8 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B372D8888BE00876CE8 /* HistoryView.swift */; };
+		30B61B5F2D8888BE00876CE8 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B382D8888BE00876CE8 /* MainView.swift */; };
+		30B61B602D8888BE00876CE8 /* MyTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B392D8888BE00876CE8 /* MyTicketView.swift */; };
+		30B61B612D8888BE00876CE8 /* NewTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B3A2D8888BE00876CE8 /* NewTicketView.swift */; };
+		30B61B622D8888BE00876CE8 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B3B2D8888BE00876CE8 /* ProfileView.swift */; };
+		30B61B632D8888BE00876CE8 /* PushView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B3C2D8888BE00876CE8 /* PushView.swift */; };
+		30B61B642D8888BE00876CE8 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B3D2D8888BE00876CE8 /* WelcomeView.swift */; };
+		30B61B652D8888BE00876CE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B3F2D8888BE00876CE8 /* AppDelegate.swift */; };
+		30B61B662D8888BE00876CE8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B452D8888BE00876CE8 /* SceneDelegate.swift */; };
+		30B61B672D8888BE00876CE8 /* UIApplication+Transitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B462D8888BE00876CE8 /* UIApplication+Transitions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3074496F2D834CE0001CA6B7 /* CineGorilla.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CineGorilla.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		43139CAFBC27FD50B493D809 /* Pods_CineGorilla.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CineGorilla.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6A298E34DBA36021ADB7CF3B /* Pods-CineGorilla.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineGorilla.release.xcconfig"; path = "Target Support Files/Pods-CineGorilla/Pods-CineGorilla.release.xcconfig"; sourceTree = "<group>"; };
-		BA4A58F1EE7C8AB78B84D53C /* Pods-CineGorilla.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineGorilla.debug.xcconfig"; path = "Target Support Files/Pods-CineGorilla/Pods-CineGorilla.debug.xcconfig"; sourceTree = "<group>"; };
+		30B61B222D8888BE00876CE8 /* AuthorizationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationController.swift; sourceTree = "<group>"; };
+		30B61B232D8888BE00876CE8 /* CertainTicketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertainTicketController.swift; sourceTree = "<group>"; };
+		30B61B242D8888BE00876CE8 /* FavoriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteController.swift; sourceTree = "<group>"; };
+		30B61B252D8888BE00876CE8 /* HistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryController.swift; sourceTree = "<group>"; };
+		30B61B262D8888BE00876CE8 /* MainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
+		30B61B272D8888BE00876CE8 /* MyTicketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTicketController.swift; sourceTree = "<group>"; };
+		30B61B282D8888BE00876CE8 /* NewTicketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTicketController.swift; sourceTree = "<group>"; };
+		30B61B292D8888BE00876CE8 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
+		30B61B2A2D8888BE00876CE8 /* PushController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushController.swift; sourceTree = "<group>"; };
+		30B61B2B2D8888BE00876CE8 /* WelcomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeController.swift; sourceTree = "<group>"; };
+		30B61B2D2D8888BE00876CE8 /* FilmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmModel.swift; sourceTree = "<group>"; };
+		30B61B2E2D8888BE00876CE8 /* TicketModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketModel.swift; sourceTree = "<group>"; };
+		30B61B302D8888BE00876CE8 /* FilmCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmCell.swift; sourceTree = "<group>"; };
+		30B61B312D8888BE00876CE8 /* TicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketCell.swift; sourceTree = "<group>"; };
+		30B61B322D8888BE00876CE8 /* UsedTicketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedTicketCell.swift; sourceTree = "<group>"; };
+		30B61B342D8888BE00876CE8 /* AuthorizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationView.swift; sourceTree = "<group>"; };
+		30B61B352D8888BE00876CE8 /* CertainTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertainTicketView.swift; sourceTree = "<group>"; };
+		30B61B362D8888BE00876CE8 /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
+		30B61B372D8888BE00876CE8 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		30B61B382D8888BE00876CE8 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		30B61B392D8888BE00876CE8 /* MyTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTicketView.swift; sourceTree = "<group>"; };
+		30B61B3A2D8888BE00876CE8 /* NewTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTicketView.swift; sourceTree = "<group>"; };
+		30B61B3B2D8888BE00876CE8 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		30B61B3C2D8888BE00876CE8 /* PushView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushView.swift; sourceTree = "<group>"; };
+		30B61B3D2D8888BE00876CE8 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		30B61B3F2D8888BE00876CE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		30B61B402D8888BE00876CE8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		30B61B412D8888BE00876CE8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		30B61B422D8888BE00876CE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		30B61B432D8888BE00876CE8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		30B61B452D8888BE00876CE8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		30B61B462D8888BE00876CE8 /* UIApplication+Transitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Transitions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		307449812D834CE2001CA6B7 /* Exceptions for "CineGorilla" folder in "CineGorilla" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 3074496E2D834CE0001CA6B7 /* CineGorilla */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		307449712D834CE0001CA6B7 /* CineGorilla */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				307449812D834CE2001CA6B7 /* Exceptions for "CineGorilla" folder in "CineGorilla" target */,
-			);
-			path = CineGorilla;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3074496C2D834CE0001CA6B7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				307449CE2D834DE6001CA6B7 /* FirebaseCore in Frameworks */,
-				307449CC2D834DE5001CA6B7 /* FirebaseAuth in Frameworks */,
-				8946E0CB95DB073FA51B7FC0 /* Pods_CineGorilla.framework in Frameworks */,
+				309B567F2D888D64008D5F82 /* FirebaseCore in Frameworks */,
+				309B567D2D888D64008D5F82 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,10 +94,9 @@
 		307449662D834CE0001CA6B7 = {
 			isa = PBXGroup;
 			children = (
-				307449712D834CE0001CA6B7 /* CineGorilla */,
+				30B61B472D8888BE00876CE8 /* CineGorilla */,
 				307449702D834CE0001CA6B7 /* Products */,
 				3A8A94AD0CE2EEB2DBD2642A /* Pods */,
-				D32A94F10CBC428DDE5100C4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -72,21 +108,82 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		30B61B2C2D8888BE00876CE8 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				30B61B222D8888BE00876CE8 /* AuthorizationController.swift */,
+				30B61B232D8888BE00876CE8 /* CertainTicketController.swift */,
+				30B61B242D8888BE00876CE8 /* FavoriteController.swift */,
+				30B61B252D8888BE00876CE8 /* HistoryController.swift */,
+				30B61B262D8888BE00876CE8 /* MainController.swift */,
+				30B61B272D8888BE00876CE8 /* MyTicketController.swift */,
+				30B61B282D8888BE00876CE8 /* NewTicketController.swift */,
+				30B61B292D8888BE00876CE8 /* ProfileController.swift */,
+				30B61B2A2D8888BE00876CE8 /* PushController.swift */,
+				30B61B2B2D8888BE00876CE8 /* WelcomeController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		30B61B2F2D8888BE00876CE8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				30B61B2D2D8888BE00876CE8 /* FilmModel.swift */,
+				30B61B2E2D8888BE00876CE8 /* TicketModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		30B61B332D8888BE00876CE8 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				30B61B302D8888BE00876CE8 /* FilmCell.swift */,
+				30B61B312D8888BE00876CE8 /* TicketCell.swift */,
+				30B61B322D8888BE00876CE8 /* UsedTicketCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		30B61B3E2D8888BE00876CE8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				30B61B332D8888BE00876CE8 /* Cells */,
+				30B61B342D8888BE00876CE8 /* AuthorizationView.swift */,
+				30B61B352D8888BE00876CE8 /* CertainTicketView.swift */,
+				30B61B362D8888BE00876CE8 /* FavoriteView.swift */,
+				30B61B372D8888BE00876CE8 /* HistoryView.swift */,
+				30B61B382D8888BE00876CE8 /* MainView.swift */,
+				30B61B392D8888BE00876CE8 /* MyTicketView.swift */,
+				30B61B3A2D8888BE00876CE8 /* NewTicketView.swift */,
+				30B61B3B2D8888BE00876CE8 /* ProfileView.swift */,
+				30B61B3C2D8888BE00876CE8 /* PushView.swift */,
+				30B61B3D2D8888BE00876CE8 /* WelcomeView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		30B61B472D8888BE00876CE8 /* CineGorilla */ = {
+			isa = PBXGroup;
+			children = (
+				30B61B2C2D8888BE00876CE8 /* Controller */,
+				30B61B2F2D8888BE00876CE8 /* Model */,
+				30B61B3E2D8888BE00876CE8 /* View */,
+				30B61B3F2D8888BE00876CE8 /* AppDelegate.swift */,
+				30B61B402D8888BE00876CE8 /* Assets.xcassets */,
+				30B61B412D8888BE00876CE8 /* GoogleService-Info.plist */,
+				30B61B422D8888BE00876CE8 /* Info.plist */,
+				30B61B442D8888BE00876CE8 /* LaunchScreen.storyboard */,
+				30B61B452D8888BE00876CE8 /* SceneDelegate.swift */,
+				30B61B462D8888BE00876CE8 /* UIApplication+Transitions.swift */,
+			);
+			path = CineGorilla;
+			sourceTree = "<group>";
+		};
 		3A8A94AD0CE2EEB2DBD2642A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				BA4A58F1EE7C8AB78B84D53C /* Pods-CineGorilla.debug.xcconfig */,
-				6A298E34DBA36021ADB7CF3B /* Pods-CineGorilla.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		D32A94F10CBC428DDE5100C4 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				43139CAFBC27FD50B493D809 /* Pods_CineGorilla.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -96,24 +193,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 307449822D834CE2001CA6B7 /* Build configuration list for PBXNativeTarget "CineGorilla" */;
 			buildPhases = (
-				94977118D6391499C4A2DC9A /* [CP] Check Pods Manifest.lock */,
 				3074496B2D834CE0001CA6B7 /* Sources */,
 				3074496C2D834CE0001CA6B7 /* Frameworks */,
 				3074496D2D834CE0001CA6B7 /* Resources */,
-				3E97F8DC61740F3907A44DAD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				307449712D834CE0001CA6B7 /* CineGorilla */,
-			);
 			name = CineGorilla;
-			packageProductDependencies = (
-				307449CB2D834DE5001CA6B7 /* FirebaseAuth */,
-				307449CD2D834DE6001CA6B7 /* FirebaseCore */,
-			);
 			productName = CineGorilla;
 			productReference = 3074496F2D834CE0001CA6B7 /* CineGorilla.app */;
 			productType = "com.apple.product-type.application";
@@ -143,7 +231,7 @@
 			mainGroup = 307449662D834CE0001CA6B7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				307449CA2D834DE5001CA6B7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				309B567B2D888D64008D5F82 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 307449702D834CE0001CA6B7 /* Products */;
@@ -160,67 +248,66 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30B61B482D8888BE00876CE8 /* Assets.xcassets in Resources */,
+				30B61B492D8888BE00876CE8 /* GoogleService-Info.plist in Resources */,
+				30B61B4B2D8888BE00876CE8 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		3E97F8DC61740F3907A44DAD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CineGorilla/Pods-CineGorilla-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CineGorilla/Pods-CineGorilla-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CineGorilla/Pods-CineGorilla-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		94977118D6391499C4A2DC9A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-CineGorilla-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3074496B2D834CE0001CA6B7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30B61B4C2D8888BE00876CE8 /* AuthorizationController.swift in Sources */,
+				30B61B4D2D8888BE00876CE8 /* CertainTicketController.swift in Sources */,
+				30B61B4E2D8888BE00876CE8 /* FavoriteController.swift in Sources */,
+				30B61B4F2D8888BE00876CE8 /* HistoryController.swift in Sources */,
+				30B61B502D8888BE00876CE8 /* MainController.swift in Sources */,
+				30B61B512D8888BE00876CE8 /* MyTicketController.swift in Sources */,
+				30B61B522D8888BE00876CE8 /* NewTicketController.swift in Sources */,
+				30B61B532D8888BE00876CE8 /* ProfileController.swift in Sources */,
+				30B61B542D8888BE00876CE8 /* PushController.swift in Sources */,
+				30B61B552D8888BE00876CE8 /* WelcomeController.swift in Sources */,
+				30B61B562D8888BE00876CE8 /* FilmModel.swift in Sources */,
+				30B61B572D8888BE00876CE8 /* TicketModel.swift in Sources */,
+				30B61B582D8888BE00876CE8 /* FilmCell.swift in Sources */,
+				30B61B592D8888BE00876CE8 /* TicketCell.swift in Sources */,
+				30B61B5A2D8888BE00876CE8 /* UsedTicketCell.swift in Sources */,
+				30B61B5B2D8888BE00876CE8 /* AuthorizationView.swift in Sources */,
+				30B61B5C2D8888BE00876CE8 /* CertainTicketView.swift in Sources */,
+				30B61B5D2D8888BE00876CE8 /* FavoriteView.swift in Sources */,
+				30B61B5E2D8888BE00876CE8 /* HistoryView.swift in Sources */,
+				30B61B5F2D8888BE00876CE8 /* MainView.swift in Sources */,
+				30B61B602D8888BE00876CE8 /* MyTicketView.swift in Sources */,
+				30B61B612D8888BE00876CE8 /* NewTicketView.swift in Sources */,
+				30B61B622D8888BE00876CE8 /* ProfileView.swift in Sources */,
+				30B61B632D8888BE00876CE8 /* PushView.swift in Sources */,
+				30B61B642D8888BE00876CE8 /* WelcomeView.swift in Sources */,
+				30B61B652D8888BE00876CE8 /* AppDelegate.swift in Sources */,
+				30B61B662D8888BE00876CE8 /* SceneDelegate.swift in Sources */,
+				30B61B672D8888BE00876CE8 /* UIApplication+Transitions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		30B61B442D8888BE00876CE8 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				30B61B432D8888BE00876CE8 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		307449832D834CE2001CA6B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BA4A58F1EE7C8AB78B84D53C /* Pods-CineGorilla.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -229,10 +316,12 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CineGorilla/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GorillaVision;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -241,15 +330,18 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.esinnur;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		307449842D834CE2001CA6B7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6A298E34DBA36021ADB7CF3B /* Pods-CineGorilla.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -258,10 +350,12 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CineGorilla/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GorillaVision;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -270,9 +364,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.esinnur;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -419,25 +517,25 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		307449CA2D834DE5001CA6B7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		309B567B2D888D64008D5F82 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 11.9.0;
+				minimumVersion = 11.10.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		307449CB2D834DE5001CA6B7 /* FirebaseAuth */ = {
+		309B567C2D888D64008D5F82 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 307449CA2D834DE5001CA6B7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 309B567B2D888D64008D5F82 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
 		};
-		307449CD2D834DE6001CA6B7 /* FirebaseCore */ = {
+		309B567E2D888D64008D5F82 /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 307449CA2D834DE5001CA6B7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 309B567B2D888D64008D5F82 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
 		};
 /* End XCSwiftPackageProductDependency section */

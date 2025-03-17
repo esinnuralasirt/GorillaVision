@@ -9,24 +9,24 @@ workflows:
         distribution_type: app_store
         bundle_identifier: com.esinnur
       vars:
-        BUNDLE_ID: "com.esinnur"
-        XCODE_WORKSPACE: "CineGorilla.xcworkspace" # <-- Put the name of your Xcode workspace here
-        XCODE_SCHEME: "CineGorilla" # <-- Put the name of your Xcode scheme here
+        BUNDLE_ID: “com.esinnur”
+        XCODE_PROJECT: “CineGorilla.xcodeproj”  # Используем проект вместо workspace
+        XCODE_SCHEME: “CineGorilla”
         APP_STORE_APPLE_ID: 6743405380
       xcode: 16.0
     scripts:
-      - name: Set up provisioning profiles settings on Xcode project
-        script: xcode-project use-profiles
+      - name: Clean project
+        script: xcode-project clean
       - name: Increment build number
         script: |
           cd $CM_BUILD_DIR
-          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number “$APP_STORE_APPLE_ID”)
           agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
       - name: Build ipa for distribution
         script: |
           xcode-project build-ipa \
-            --workspace "$CM_BUILD_DIR/$XCODE_WORKSPACE" \
-            --scheme "$XCODE_SCHEME"
+            --project “$CM_BUILD_DIR/$XCODE_PROJECT” \
+            --scheme “$XCODE_SCHEME”
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
@@ -41,9 +41,5 @@ workflows:
           failure: false
       app_store_connect:
         auth: integration
-        # Configuration related to TestFlight (optional)
-        # Note: This action is performed during post-processing.
         submit_to_testflight: false
-        # Configuration related to App Store (optional)
-        # Note: This action is performed during post-processing.
         submit_to_app_store: false
