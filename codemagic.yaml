@@ -10,26 +10,44 @@ workflows:
         bundle_identifier: com.esinnur
       vars:
         BUNDLE_ID: "com.esinnur"
-        XCODE_PROJECT: "CineGorilla.xcodeproj"
+        XCODE_PROJECT: "CineGorilla.xcodeproj"  # Используем проект вместо workspace
         XCODE_SCHEME: "CineGorilla"
         APP_STORE_APPLE_ID: 6743405380
+        TEAM_ID: "YOUR_TEAM_ID"  # Замени на свой Team ID
       xcode: 16.0
     scripts:
       - name: Clean project
+        script: xcode-project clean
+      - name: Generate export_options.plist
         script: |
-          xcode-project clean \
-            --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME"
+          cat > "$CM_BUILD_DIR/export_options.plist" <<EOL
+          <?xml version="1.0" encoding="UTF-8"?>
+          <plist version="1.0">
+            <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>uploadBitcode</key>
+              <true/>
+              <key>uploadSymbols</key>
+              <true/>
+              <key>teamID</key>
+              <string>${TEAM_ID}</string>
+              <key>appIdentifier</key>
+              <string>${BUNDLE_ID}</string>
+            </dict>
+          </plist>
+          EOL
       - name: Increment build number
         script: |
-          cd "$CM_BUILD_DIR"
+          cd $CM_BUILD_DIR
           LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
           agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
       - name: Build ipa for distribution
         script: |
           xcode-project build-ipa \
             --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME"
+            --scheme "$XCODE_SCHEME" \
+            --export-options-plist "$CM_BUILD_DIR/export_options.plist"
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
