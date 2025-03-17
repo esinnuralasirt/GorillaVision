@@ -10,7 +10,7 @@ workflows:
         bundle_identifier: "com.esinnur"
       vars:
         BUNDLE_ID: "com.esinnur"
-        XCODE_WORKSPACE: "CineGorilla.xcworkspace"
+        XCODE_PROJECT: "CineGorilla.xcodeproj"
         XCODE_SCHEME: "CineGorilla"
         APP_STORE_APPLE_ID: 6743405380
         TEAM_ID: "K3827AC47X"  # Ваш Team ID
