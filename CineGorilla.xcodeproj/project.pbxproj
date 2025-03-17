@@ -9,10 +9,14 @@
 /* Begin PBXBuildFile section */
 		307449CC2D834DE5001CA6B7 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 307449CB2D834DE5001CA6B7 /* FirebaseAuth */; };
 		307449CE2D834DE6001CA6B7 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 307449CD2D834DE6001CA6B7 /* FirebaseCore */; };
+		8946E0CB95DB073FA51B7FC0 /* Pods_CineGorilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43139CAFBC27FD50B493D809 /* Pods_CineGorilla.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3074496F2D834CE0001CA6B7 /* CineGorilla.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CineGorilla.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		43139CAFBC27FD50B493D809 /* Pods_CineGorilla.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CineGorilla.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A298E34DBA36021ADB7CF3B /* Pods-CineGorilla.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineGorilla.release.xcconfig"; path = "Target Support Files/Pods-CineGorilla/Pods-CineGorilla.release.xcconfig"; sourceTree = "<group>"; };
+		BA4A58F1EE7C8AB78B84D53C /* Pods-CineGorilla.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineGorilla.debug.xcconfig"; path = "Target Support Files/Pods-CineGorilla/Pods-CineGorilla.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -43,6 +47,7 @@
 			files = (
 				307449CE2D834DE6001CA6B7 /* FirebaseCore in Frameworks */,
 				307449CC2D834DE5001CA6B7 /* FirebaseAuth in Frameworks */,
+				8946E0CB95DB073FA51B7FC0 /* Pods_CineGorilla.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +59,8 @@
 			children = (
 				307449712D834CE0001CA6B7 /* CineGorilla */,
 				307449702D834CE0001CA6B7 /* Products */,
+				3A8A94AD0CE2EEB2DBD2642A /* Pods */,
+				D32A94F10CBC428DDE5100C4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -65,6 +72,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3A8A94AD0CE2EEB2DBD2642A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BA4A58F1EE7C8AB78B84D53C /* Pods-CineGorilla.debug.xcconfig */,
+				6A298E34DBA36021ADB7CF3B /* Pods-CineGorilla.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		D32A94F10CBC428DDE5100C4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				43139CAFBC27FD50B493D809 /* Pods_CineGorilla.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -72,9 +97,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 307449822D834CE2001CA6B7 /* Build configuration list for PBXNativeTarget "CineGorilla" */;
 			buildPhases = (
+				94977118D6391499C4A2DC9A /* [CP] Check Pods Manifest.lock */,
 				3074496B2D834CE0001CA6B7 /* Sources */,
 				3074496C2D834CE0001CA6B7 /* Frameworks */,
 				3074496D2D834CE0001CA6B7 /* Resources */,
+				3E97F8DC61740F3907A44DAD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -139,6 +166,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3E97F8DC61740F3907A44DAD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CineGorilla/Pods-CineGorilla-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CineGorilla/Pods-CineGorilla-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CineGorilla/Pods-CineGorilla-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		94977118D6391499C4A2DC9A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CineGorilla-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3074496B2D834CE0001CA6B7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -152,6 +221,7 @@
 /* Begin XCBuildConfiguration section */
 		307449832D834CE2001CA6B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA4A58F1EE7C8AB78B84D53C /* Pods-CineGorilla.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -169,7 +239,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = cinegorilla.CineGorilla;
+				PRODUCT_BUNDLE_IDENTIFIER = com.esinnur;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -180,6 +250,7 @@
 		};
 		307449842D834CE2001CA6B7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6A298E34DBA36021ADB7CF3B /* Pods-CineGorilla.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -197,7 +268,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = cinegorilla.CineGorilla;
+				PRODUCT_BUNDLE_IDENTIFIER = com.esinnur;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
