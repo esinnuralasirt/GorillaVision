@@ -13,7 +13,7 @@ workflows:
         XCODE_PROJECT: "CineGorilla.xcodeproj"
         XCODE_SCHEME: "CineGorilla"
         APP_STORE_APPLE_ID: 6743405380
-        TEAM_ID: "YOUR_TEAM_ID"  # Замінити на свій Team ID
+        TEAM_ID: "K3827AC47X"  
       xcode: 16.0
     scripts:
       - name: Clean project
