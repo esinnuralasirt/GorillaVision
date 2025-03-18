@@ -7,41 +7,37 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: "com.esinnur"
+        bundle_identifier: “com.esinnur”
       vars:
-        BUNDLE_ID: "com.esinnur"
-        XCODE_PROJECT: "CineGorilla.xcodeproj"
-        XCODE_SCHEME: "CineGorilla"
+        BUNDLE_ID: “com.esinnur”
+        XCODE_PROJECT: “CineGorilla.xcodeproj”
+        XCODE_SCHEME: “CineGorilla”
         APP_STORE_APPLE_ID: 6743405380
-        TEAM_ID: "K3827AC47X"  # Ваш Team ID
+        TEAM_ID: “K3827AC47X”  # Ваш Team ID
       xcode: 16.0
     scripts:
       - name: Set up provisioning profiles settings on Xcode project
         script: |
           # CodeMagic автоматично налаштує профілі підпису та сертифікати
           # Тут не потрібно нічого робити, так як профілі та сертифікати підтягуються через інтерфейс
-
       - name: Increment build number
         script: |
           # Інкрементуємо номер збірки в проекті
-          cd "$CM_BUILD_DIR"
-          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
+          cd “$CM_BUILD_DIR”
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number “$APP_STORE_APPLE_ID”)
           agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
-
       - name: Build ipa for distribution
         script: |
           # Створюємо IPA для розповсюдження
           xcode-project build-ipa \
-            --workspace "$CM_BUILD_DIR/$XCODE_WORKSPACE" \
-            --scheme "$XCODE_SCHEME" \
-            --export-options-plist "$CM_BUILD_DIR/export_options.plist"  # Задаємо експорт опцій для підпису
-
+            --workspace “$CM_BUILD_DIR/$XCODE_WORKSPACE” \
+            --scheme “$XCODE_SCHEME” \
+            --export-options-plist “$CM_BUILD_DIR/export_options.plist”  # Задаємо експорт опцій для підпису
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
-
     publishing:
       email:
         recipients:
