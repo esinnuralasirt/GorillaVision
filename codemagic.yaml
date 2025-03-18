@@ -45,4 +45,4 @@ workflows:
         # Конфигурация для TestFlight (опционально)
         submit_to_testflight: false
         # Конфигурация для App Store (опционально)
-        submit_to_app_store: falseworkflows:
+        submit_to_app_store: false
