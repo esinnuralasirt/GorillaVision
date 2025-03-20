@@ -3,12 +3,11 @@ workflows:
     name: iOS Native
     max_build_duration: 120
     integrations:
-      app_store_connect: FirstKey  # Прибрано дублювання ключів
+      app_store_connect: FirstKey
     environment:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.esinnur
-        generate_signing_certificate: true  # Додано для автоматичного генерування сертифікатів
       vars:
         BUNDLE_ID: "com.esinnur"
         XCODE_PROJECT: "CineGorilla.xcodeproj"
@@ -110,7 +109,7 @@ workflows:
           - fassy363@gmail.com
         notify:
           success: true
-          failure: true  # Змінено, щоб отримувати сповіщення про помилки
+          failure: true
       app_store_connect:
         auth: integration
         submit_to_testflight: false
