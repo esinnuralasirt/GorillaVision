@@ -3,54 +3,33 @@ workflows:
     name: iOS Native
     max_build_duration: 120
     integrations:
-      app_store_connect: CodeMagic Api Key
+      app_store_connect: FirstKey
     environment:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.esinnur
       vars:
         BUNDLE_ID: "com.esinnur"
-        XCODE_PROJECT: "CineGorilla.xcodeproj"
-        XCODE_SCHEME: "CineGorilla"
+        XCODE_PROJECT: "CineGorilla.xcodeproj" # Убедитесь, что имя проекта указано правильно
+        XCODE_SCHEME: "CineGorilla" # Убедитесь, что имя схемы указано правильно
         APP_STORE_APPLE_ID: 6743405380
-        TEAM_ID: "K3827AC47X"
+        TEAM_ID: "K3827AC47X"  # Ваш Team ID
       xcode: 16.0
     scripts:
-      - name: Автоматичне налаштування підписування
-        script: |
-          echo "Використання автоматичного підписування..."
-          # Змінюємо налаштування проекту для автоматичного підписування
-          cd "$CM_BUILD_DIR"
-          sed -i '' "s/CODE_SIGN_STYLE = Manual;/CODE_SIGN_STYLE = Automatic;/g" "$XCODE_PROJECT/project.pbxproj" || true
-          sed -i '' "s/PROVISIONING_PROFILE_SPECIFIER = .*;/PROVISIONING_PROFILE_SPECIFIER = \"\";/g" "$XCODE_PROJECT/project.pbxproj" || true
-
-      - name: Синхронізація версій додатку та розширень
-        script: |
-          cd "$CM_BUILD_DIR"
-          # Отримати версію основного додатку
-          MAIN_VERSION=$(xcrun agvtool what-marketing-version -terse1 | head -n 1)
-          echo "Версія основного додатку: $MAIN_VERSION"
-          
-          # Оновити Info.plist для всіх знайдених розширень та цілей
-          find . -name "Info.plist" -type f -exec plutil -replace CFBundleShortVersionString -string "$MAIN_VERSION" {} \;
-          echo "Версії були оновлені у всіх файлах Info.plist до $MAIN_VERSION"
+      - name: Set up provisioning profiles settings on Xcode project
+        script: xcode-project use-profiles
 
       - name: Increment build number
         script: |
           cd "$CM_BUILD_DIR"
           LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
-          echo "Останній номер збірки: $LATEST_BUILD_NUMBER"
-          NEW_BUILD_NUMBER=$(($LATEST_BUILD_NUMBER + 1))
-          agvtool new-version -all $NEW_BUILD_NUMBER
-          echo "Новий номер збірки: $NEW_BUILD_NUMBER"
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
 
       - name: Build ipa for distribution
         script: |
           xcode-project build-ipa \
             --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME" \
-            --use-auto-signing \
-            --verbose
+            --scheme "$XCODE_SCHEME"
 
     artifacts:
       - build/ios/ipa/*.ipa
@@ -64,7 +43,7 @@ workflows:
           - fassy363@gmail.com
         notify:
           success: true
-          failure: true
+          failure: false
       app_store_connect:
         auth: integration
         submit_to_testflight: false
