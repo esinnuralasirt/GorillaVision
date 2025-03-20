@@ -89,7 +89,7 @@ workflows:
           - fassy363@gmail.com
         notify:
           success: true
-          failure: true  # Змінено на true, щоб отримувати повідомлення про невдалі збірки
+          failure: false  # Змінено на true, щоб отримувати повідомлення про невдалі збірки
       app_store_connect:
         auth: integration
         submit_to_testflight: false
