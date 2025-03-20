@@ -3,11 +3,12 @@ workflows:
     name: iOS Native
     max_build_duration: 120
     integrations:
-      app_store_connect: FirstKey  # Залишаємо тільки один ключ
+      app_store_connect: FirstKey  # Прибрано дублювання ключів
     environment:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.esinnur
+        generate_signing_certificate: true  # Додано для автоматичного генерування сертифікатів
       vars:
         BUNDLE_ID: "com.esinnur"
         XCODE_PROJECT: "CineGorilla.xcodeproj"
@@ -16,31 +17,28 @@ workflows:
         TEAM_ID: "K3827AC47X"
       xcode: 16.0
     scripts:
-      - name: Перевірка проекту
+      - name: Налаштування автоматичного підписування
         script: |
-          echo "Поточна директорія: $(pwd)"
-          echo "Вміст директорії збірки:"
-          ls -la "$CM_BUILD_DIR"
-          echo "Перевірка Xcode проекту:"
-          find "$CM_BUILD_DIR" -name "*.xcodeproj" | xargs -I{} ls -la {}
-          echo "Пошук розширень додатку:"
-          find "$CM_BUILD_DIR" -name "Info.plist" | grep -v "/Pods/"
+          echo "Налаштування проекту для автоматичного підписування..."
+          cd "$CM_BUILD_DIR"
+          # Змінюємо налаштування підписування в проекті
+          sed -i '' "s/CODE_SIGN_STYLE = Manual;/CODE_SIGN_STYLE = Automatic;/g" "$XCODE_PROJECT/project.pbxproj" || true
+          sed -i '' "s/PROVISIONING_PROFILE_SPECIFIER = FirstProf;/PROVISIONING_PROFILE_SPECIFIER = \"\";/g" "$XCODE_PROJECT/project.pbxproj" || true
           
-      - name: Перевірка профілів підписування
-        script: |
-          echo "Команда розробників (Team ID): $TEAM_ID"
-          echo "Bundle ID: $BUNDLE_ID"
-          echo "Перевірка профілів забезпечення:"
-          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ || echo "Профілі забезпечення не знайдено"
-          echo "Перевірка сертифікатів:"
-          security find-identity -v -p codesigning || echo "Сертифікати не знайдено"
-          echo "Налаштування підписування в проекті:"
-          xcodebuild -project "$CM_BUILD_DIR/$XCODE_PROJECT" -scheme "$XCODE_SCHEME" -showBuildSettings | grep -E "CODE_SIGN|PROVISIONING|DEVELOPMENT_TEAM"
+          # Налаштування для notificationsvc (розширення пуш-повідомлень)
+          TARGETS=$(xcodebuild -project "$XCODE_PROJECT" -list | grep "Targets:" -A 100 | grep -v "Targets:" | grep -v "^$" | sed 's/^ *//')
+          echo "Знайдені цілі: $TARGETS"
+          
+          for TARGET in $TARGETS; do
+            echo "Налаштування підписування для цілі: $TARGET"
+            xcrun xcodebuild -project "$XCODE_PROJECT" -target "$TARGET" \
+              DEVELOPMENT_TEAM="$TEAM_ID" \
+              CODE_SIGN_STYLE=Automatic \
+              CODE_SIGN_IDENTITY="Apple Development" \
+              PROVISIONING_PROFILE_SPECIFIER="" || true
+          done
 
-      - name: Set up provisioning profiles settings on Xcode project
-        script: xcode-project use-profiles
-
-      - name: Синхронізація версій основного додатку та розширень
+      - name: Синхронізація версій додатку та розширень
         script: |
           cd "$CM_BUILD_DIR"
           # Отримати версію основного додатку
@@ -64,32 +62,45 @@ workflows:
 
       - name: Build ipa for distribution
         script: |
-          echo "Початок збірки IPA..."
-          set -x  # Включити детальне логування
+          echo "Початок збірки IPA з автоматичним підписуванням..."
           xcode-project build-ipa \
             --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME" \
+            --use-auto-signing \
             --verbose
           
+          # Збереження статусу виконання
+          BUILD_STATUS=$?
+          
           # Якщо збірка не вдалася, спробуємо отримати більше інформації
-          if [ $? -ne 0 ]; then
-            echo "Збірка не вдалася, виведення детальних логів Xcode:"
-            find ~/Library/Developer/Xcode/DerivedData -name "*.log" -type f -exec ls -la {} \;
+          if [ $BUILD_STATUS -ne 0 ]; then
+            echo "Збірка не вдалася, спроба отримати детальні логи..."
             
-            # Показати останні рядки основного лога збірки
-            LATEST_LOG=$(find ~/Library/Developer/Xcode/DerivedData -name "*.log" -type f -print0 | xargs -0 ls -t | head -1)
-            if [ -n "$LATEST_LOG" ]; then
-              echo "Останні 100 рядків лога збірки:"
-              tail -n 100 "$LATEST_LOG"
-            fi
+            # Спроба отримати детальний лог збірки
+            xcodebuild -project "$CM_BUILD_DIR/$XCODE_PROJECT" -scheme "$XCODE_SCHEME" \
+              -archivePath build/ios/xcarchive/CineGorilla.xcarchive archive \
+              CODE_SIGN_STYLE=Automatic \
+              DEVELOPMENT_TEAM="$TEAM_ID" \
+              -allowProvisioningUpdates \
+              -verbose > /tmp/verbose_build_log.txt 2>&1
+            
+            echo "Помилки та попередження збірки:"
+            grep -E "error:|warning:" /tmp/verbose_build_log.txt | tail -n 50
+            
+            # Додати лог до артефактів
+            mkdir -p /tmp/xcodebuild_logs
+            cp /tmp/verbose_build_log.txt /tmp/xcodebuild_logs/
+            
+            # Повертаємо статус помилки
+            exit $BUILD_STATUS
           fi
 
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
+      - /tmp/verbose_build_log.txt
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
-      # Додаємо більше логів
       - $HOME/Library/Developer/Xcode/DerivedData/Logs/Build/*.log
       - $HOME/Library/Logs/CoreSimulator/*.log
 
@@ -99,7 +110,7 @@ workflows:
           - fassy363@gmail.com
         notify:
           success: true
-          failure: true  # Змінено на true, щоб отримувати повідомлення про невдалі збірки
+          failure: true  # Змінено, щоб отримувати сповіщення про помилки
       app_store_connect:
         auth: integration
         submit_to_testflight: false
