@@ -11,32 +11,77 @@ workflows:
         bundle_identifier: com.esinnur
       vars:
         BUNDLE_ID: "com.esinnur"
-        XCODE_PROJECT: "CineGorilla.xcodeproj" # Убедитесь, что имя проекта указано правильно
-        XCODE_SCHEME: "CineGorilla" # Убедитесь, что имя схемы указано правильно
+        XCODE_PROJECT: "CineGorilla.xcodeproj"
+        XCODE_SCHEME: "CineGorilla"
         APP_STORE_APPLE_ID: 6743405380
-        TEAM_ID: "K3827AC47X"  # Ваш Team ID
+        TEAM_ID: "K3827AC47X"
       xcode: 16.0
     scripts:
+      - name: Перевірка структури проекту
+        script: |
+          echo "Поточна директорія: $(pwd)"
+          echo "Вміст директорії збірки:"
+          ls -la "$CM_BUILD_DIR"
+          echo "Перевірка Xcode проекту:"
+          find "$CM_BUILD_DIR" -name "*.xcodeproj" | xargs -I{} ls -la {}
+      
+      - name: Перевірка налаштувань підписування
+        script: |
+          echo "Команда розробників (Team ID): $TEAM_ID"
+          echo "Bundle ID: $BUNDLE_ID"
+          echo "Перевірка профілів забезпечення:"
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ || echo "Профілі забезпечення не знайдено"
+          echo "Перевірка сертифікатів:"
+          security find-identity -v -p codesigning || echo "Сертифікати не знайдено"
+
       - name: Set up provisioning profiles settings on Xcode project
         script: xcode-project use-profiles
+
+      - name: Перевірка налаштувань збірки Xcode
+        script: |
+          xcodebuild -project "$CM_BUILD_DIR/$XCODE_PROJECT" -scheme "$XCODE_SCHEME" -showBuildSettings | grep -E "CODE_SIGN|PROVISIONING|DEVELOPMENT_TEAM"
 
       - name: Increment build number
         script: |
           cd "$CM_BUILD_DIR"
           LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
-          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+          echo "Останній номер збірки в App Store: $LATEST_BUILD_NUMBER"
+          NEW_BUILD_NUMBER=$(($LATEST_BUILD_NUMBER + 1))
+          echo "Новий номер збірки: $NEW_BUILD_NUMBER"
+          agvtool new-version -all $NEW_BUILD_NUMBER
+          echo "Номер збірки після інкременту:"
+          agvtool what-version
 
       - name: Build ipa for distribution
         script: |
+          echo "Початок збірки IPA..."
+          set -x  # Включити детальне логування
           xcode-project build-ipa \
             --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME"
+            --scheme "$XCODE_SCHEME" \
+            --verbose
+          
+          # Якщо збірка не вдалася, спробуємо отримати більше інформації
+          if [ $? -ne 0 ]; then
+            echo "Збірка не вдалася, виведення детальних логів Xcode:"
+            find ~/Library/Developer/Xcode/DerivedData -name "*.log" -type f -exec ls -la {} \;
+            
+            # Показати останні рядки основного лога збірки
+            LATEST_LOG=$(find ~/Library/Developer/Xcode/DerivedData -name "*.log" -type f -print0 | xargs -0 ls -t | head -1)
+            if [ -n "$LATEST_LOG" ]; then
+              echo "Останні 100 рядків лога збірки:"
+              tail -n 100 "$LATEST_LOG"
+            fi
+          fi
 
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+      # Додаємо більше логів
+      - $HOME/Library/Developer/Xcode/DerivedData/Logs/Build/*.log
+      - $HOME/Library/Logs/CoreSimulator/*.log
 
     publishing:
       email:
@@ -44,7 +89,7 @@ workflows:
           - fassy363@gmail.com
         notify:
           success: true
-          failure: false
+          failure: true  # Змінено на true, щоб отримувати повідомлення про невдалі збірки
       app_store_connect:
         auth: integration
         submit_to_testflight: false
