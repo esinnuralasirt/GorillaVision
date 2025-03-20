@@ -10,26 +10,47 @@ workflows:
         bundle_identifier: com.esinnur
       vars:
         BUNDLE_ID: "com.esinnur"
-        XCODE_PROJECT: "CineGorilla.xcodeproj" # Убедитесь, что имя проекта указано правильно
-        XCODE_SCHEME: "CineGorilla" # Убедитесь, что имя схемы указано правильно
+        XCODE_PROJECT: "CineGorilla.xcodeproj"
+        XCODE_SCHEME: "CineGorilla"
         APP_STORE_APPLE_ID: 6743405380
-        TEAM_ID: "K3827AC47X"  # Ваш Team ID
+        TEAM_ID: "K3827AC47X"
       xcode: 16.0
     scripts:
-      - name: Set up provisioning profiles settings on Xcode project
-        script: xcode-project use-profiles
+      - name: Автоматичне налаштування підписування
+        script: |
+          echo "Використання автоматичного підписування..."
+          # Змінюємо налаштування проекту для автоматичного підписування
+          cd "$CM_BUILD_DIR"
+          sed -i '' "s/CODE_SIGN_STYLE = Manual;/CODE_SIGN_STYLE = Automatic;/g" "$XCODE_PROJECT/project.pbxproj" || true
+          sed -i '' "s/PROVISIONING_PROFILE_SPECIFIER = .*;/PROVISIONING_PROFILE_SPECIFIER = \"\";/g" "$XCODE_PROJECT/project.pbxproj" || true
+
+      - name: Синхронізація версій додатку та розширень
+        script: |
+          cd "$CM_BUILD_DIR"
+          # Отримати версію основного додатку
+          MAIN_VERSION=$(xcrun agvtool what-marketing-version -terse1 | head -n 1)
+          echo "Версія основного додатку: $MAIN_VERSION"
+          
+          # Оновити Info.plist для всіх знайдених розширень та цілей
+          find . -name "Info.plist" -type f -exec plutil -replace CFBundleShortVersionString -string "$MAIN_VERSION" {} \;
+          echo "Версії були оновлені у всіх файлах Info.plist до $MAIN_VERSION"
 
       - name: Increment build number
         script: |
           cd "$CM_BUILD_DIR"
           LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
-          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+          echo "Останній номер збірки: $LATEST_BUILD_NUMBER"
+          NEW_BUILD_NUMBER=$(($LATEST_BUILD_NUMBER + 1))
+          agvtool new-version -all $NEW_BUILD_NUMBER
+          echo "Новий номер збірки: $NEW_BUILD_NUMBER"
 
       - name: Build ipa for distribution
         script: |
           xcode-project build-ipa \
             --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME"
+            --scheme "$XCODE_SCHEME" \
+            --use-auto-signing \
+            --verbose
 
     artifacts:
       - build/ios/ipa/*.ipa
@@ -43,7 +64,7 @@ workflows:
           - fassy363@gmail.com
         notify:
           success: true
-          failure: false
+          failure: true
       app_store_connect:
         auth: integration
         submit_to_testflight: false
