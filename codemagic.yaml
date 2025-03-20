@@ -16,26 +16,8 @@ workflows:
         TEAM_ID: "K3827AC47X"
       xcode: 16.0
     scripts:
-      - name: Налаштування автоматичного підписування
-        script: |
-          echo "Налаштування проекту для автоматичного підписування..."
-          cd "$CM_BUILD_DIR"
-          # Змінюємо налаштування підписування в проекті
-          sed -i '' "s/CODE_SIGN_STYLE = Manual;/CODE_SIGN_STYLE = Automatic;/g" "$XCODE_PROJECT/project.pbxproj" || true
-          sed -i '' "s/PROVISIONING_PROFILE_SPECIFIER = FirstProf;/PROVISIONING_PROFILE_SPECIFIER = \"\";/g" "$XCODE_PROJECT/project.pbxproj" || true
-          
-          # Налаштування для notificationsvc (розширення пуш-повідомлень)
-          TARGETS=$(xcodebuild -project "$XCODE_PROJECT" -list | grep "Targets:" -A 100 | grep -v "Targets:" | grep -v "^$" | sed 's/^ *//')
-          echo "Знайдені цілі: $TARGETS"
-          
-          for TARGET in $TARGETS; do
-            echo "Налаштування підписування для цілі: $TARGET"
-            xcrun xcodebuild -project "$XCODE_PROJECT" -target "$TARGET" \
-              DEVELOPMENT_TEAM="$TEAM_ID" \
-              CODE_SIGN_STYLE=Automatic \
-              CODE_SIGN_IDENTITY="Apple Development" \
-              PROVISIONING_PROFILE_SPECIFIER="" || true
-          done
+      - name: Set up provisioning profiles settings on Xcode project
+        script: xcode-project use-profiles
 
       - name: Синхронізація версій додатку та розширень
         script: |
@@ -59,45 +41,70 @@ workflows:
           echo "Номер збірки після інкременту:"
           agvtool what-version
 
-      - name: Build ipa for distribution
+      - name: Ручна збірка та архівування
         script: |
-          echo "Початок збірки IPA з автоматичним підписуванням..."
-          xcode-project build-ipa \
-            --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME" \
-            --use-auto-signing \
-            --verbose
+          cd "$CM_BUILD_DIR"
           
-          # Збереження статусу виконання
-          BUILD_STATUS=$?
+          # Створюємо файл з параметрами експорту
+          cat > exportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>teamID</key>
+              <string>$TEAM_ID</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>com.esinnur</key>
+                  <string>match AppStore com.esinnur</string>
+                  <key>com.esinnur.notificationsvc</key>
+                  <string>match AppStore com.esinnur.notificationsvc</string>
+              </dict>
+          </dict>
+          </plist>
+          EOF
           
-          # Якщо збірка не вдалася, спробуємо отримати більше інформації
-          if [ $BUILD_STATUS -ne 0 ]; then
-            echo "Збірка не вдалася, спроба отримати детальні логи..."
-            
-            # Спроба отримати детальний лог збірки
-            xcodebuild -project "$CM_BUILD_DIR/$XCODE_PROJECT" -scheme "$XCODE_SCHEME" \
-              -archivePath build/ios/xcarchive/CineGorilla.xcarchive archive \
-              CODE_SIGN_STYLE=Automatic \
-              DEVELOPMENT_TEAM="$TEAM_ID" \
-              -allowProvisioningUpdates \
-              -verbose > /tmp/verbose_build_log.txt 2>&1
-            
-            echo "Помилки та попередження збірки:"
-            grep -E "error:|warning:" /tmp/verbose_build_log.txt | tail -n 50
-            
-            # Додати лог до артефактів
-            mkdir -p /tmp/xcodebuild_logs
-            cp /tmp/verbose_build_log.txt /tmp/xcodebuild_logs/
-            
-            # Повертаємо статус помилки
-            exit $BUILD_STATUS
+          echo "Архівування проекту..."
+          xcodebuild clean archive \
+            -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
+            -archivePath "build/ios/xcarchive/CineGorilla.xcarchive" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="$TEAM_ID" \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            -verbose
+          
+          if [ $? -eq 0 ]; then
+            echo "Архів успішно створено, експортуємо IPA..."
+            mkdir -p build/ios/ipa
+            xcodebuild -exportArchive \
+              -archivePath "build/ios/xcarchive/CineGorilla.xcarchive" \
+              -exportOptionsPlist "exportOptions.plist" \
+              -exportPath "build/ios/ipa" \
+              -verbose
+          else
+            echo "Не вдалося створити архів."
+            exit 1
+          fi
+
+      - name: Запасний метод збірки, якщо попередній не спрацював
+        script: |
+          if [ ! -f "build/ios/ipa/CineGorilla.ipa" ]; then
+            echo "Використовуємо стандартний метод збірки..."
+            xcode-project build-ipa \
+              --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
+              --scheme "$XCODE_SCHEME"
+          else
+            echo "IPA файл успішно створено попереднім методом."
           fi
 
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
-      - /tmp/verbose_build_log.txt
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
       - $HOME/Library/Developer/Xcode/DerivedData/Logs/Build/*.log
