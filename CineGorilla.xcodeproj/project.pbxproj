@@ -449,7 +449,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CineGorilla/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = GorillaVision;
+				INFOPLIST_KEY_CFBundleDisplayName = "Gorilla Vision";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera to take photos and videos.";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to show you personalized ads on the marketplaces.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -487,7 +487,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CineGorilla/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = GorillaVision;
+				INFOPLIST_KEY_CFBundleDisplayName = "Gorilla Vision";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to the camera to take photos and videos.";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to show you personalized ads on the marketplaces.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
