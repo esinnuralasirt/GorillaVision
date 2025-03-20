@@ -4,7 +4,6 @@ workflows:
     max_build_duration: 120
     integrations:
       app_store_connect: CodeMagic Api Key
-      app_store_connect: CodeMagic Api Key Push
     environment:
       ios_signing:
         distribution_type: app_store
@@ -37,9 +36,23 @@ workflows:
       - name: Set up provisioning profiles settings on Xcode project
         script: xcode-project use-profiles
 
-      - name: Перевірка налаштувань збірки Xcode
+      - name: Синхронізація версій додатку та розширень
         script: |
-          xcodebuild -project "$CM_BUILD_DIR/$XCODE_PROJECT" -scheme "$XCODE_SCHEME" -showBuildSettings | grep -E "CODE_SIGN|PROVISIONING|DEVELOPMENT_TEAM"
+          cd "$CM_BUILD_DIR"
+          # Отримати версію основного додатку
+          MAIN_VERSION=$(xcrun agvtool what-marketing-version -terse1 | head -n 1)
+          echo "Версія основного додатку: $MAIN_VERSION"
+          
+          # Оновити Info.plist для всіх знайдених розширень та цілей
+          find . -name "Info.plist" -type f -exec plutil -replace CFBundleShortVersionString -string "$MAIN_VERSION" {} \;
+          echo "Версії були оновлені у всіх файлах Info.plist до $MAIN_VERSION"
+          
+          # Також оновити для всіх таргетів через agvtool
+          for target in $(xcodebuild -project "$XCODE_PROJECT" -list | grep "Targets:" -A 100 | grep -v "Targets:" | grep -v "^$" | sed 's/^ *//')
+          do
+            echo "Оновлення версії для цілі: $target до $MAIN_VERSION"
+            xcrun agvtool new-marketing-version -targetSettings "$target" $MAIN_VERSION 2>/dev/null || echo "Помилка оновлення для $target"
+          done
 
       - name: Increment build number
         script: |
@@ -52,34 +65,80 @@ workflows:
           echo "Номер збірки після інкременту:"
           agvtool what-version
 
-      - name: Build ipa for distribution
+      - name: Створення файлу exportOptions.plist
+        script: |
+          cat > "$CM_BUILD_DIR/exportOptions.plist" << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>teamID</key>
+              <string>$TEAM_ID</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>stripSwiftSymbols</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
+          echo "Файл exportOptions.plist створено:"
+          cat "$CM_BUILD_DIR/exportOptions.plist"
+          - name: Build ipa for distribution
         script: |
           echo "Початок збірки IPA..."
           set -x  # Включити детальне логування
+          XCODE_LOG_PATH="/tmp/xcodebuild_log.txt"
+          
+          # Використовуємо стандартну утиліту Codemagic для збірки IPA з детальним логуванням
           xcode-project build-ipa \
             --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME" \
-            --verbose
+            --verbose 2>&1 | tee "$XCODE_LOG_PATH"
           
-          # Якщо збірка не вдалася, спробуємо отримати більше інформації
-          if [ $? -ne 0 ]; then
-            echo "Збірка не вдалася, виведення детальних логів Xcode:"
-            find ~/Library/Developer/Xcode/DerivedData -name "*.log" -type f -exec ls -la {} \;
+          # Перевіряємо чи був створений IPA файл
+          if [ -f "build/ios/ipa/*.ipa" ]; then
+            echo "IPA файл успішно створено!"
+          else
+            echo "ПОМИЛКА: IPA файл не був створений!"
+            # Шукаємо конкретні помилки в логах
+            echo "Шукаємо помилки в логах..."
+            grep -E "error:|warning:|fail|fatal" "$XCODE_LOG_PATH" | tail -n 50
             
-            # Показати останні рядки основного лога збірки
-            LATEST_LOG=$(find ~/Library/Developer/Xcode/DerivedData -name "*.log" -type f -print0 | xargs -0 ls -t | head -1)
-            if [ -n "$LATEST_LOG" ]; then
-              echo "Останні 100 рядків лога збірки:"
-              tail -n 100 "$LATEST_LOG"
+            # Якщо стандартна утиліта не спрацювала, спробуємо прямі команди xcodebuild
+            echo "Спроба альтернативного методу збірки..."
+            
+            xcodebuild -project "$CM_BUILD_DIR/$XCODE_PROJECT" -scheme "$XCODE_SCHEME" \
+              -archivePath build/ios/xcarchive/CineGorilla.xcarchive archive \
+              COMPILER_INDEX_STORE_ENABLE=NO \
+              DEVELOPMENT_TEAM="$TEAM_ID" \
+              'CODE_SIGN_IDENTITY=Apple Distribution' \
+              CODE_SIGN_STYLE=Manual \
+              -allowProvisioningUpdates \
+              -verbose 2>&1 | tee -a "$XCODE_LOG_PATH"
+            
+            # Якщо архівування успішне, створити IPA
+            if [ -d "build/ios/xcarchive/CineGorilla.xcarchive" ]; then
+              echo "Архів успішно створений, генеруємо IPA..."
+              xcodebuild -exportArchive \
+                -archivePath build/ios/xcarchive/CineGorilla.xcarchive \
+                -exportOptionsPlist "$CM_BUILD_DIR/exportOptions.plist" \
+                -exportPath build/ios/ipa \
+                -allowProvisioningUpdates \
+                -verbose 2>&1 | tee -a "$XCODE_LOG_PATH"
+            else
+              echo "ПОМИЛКА: Архів не був створений!"
+              exit 1
             fi
           fi
 
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
+      - /tmp/xcodebuild_log.txt
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
-      # Додаємо більше логів
       - $HOME/Library/Developer/Xcode/DerivedData/Logs/Build/*.log
       - $HOME/Library/Logs/CoreSimulator/*.log
 
@@ -89,7 +148,7 @@ workflows:
           - fassy363@gmail.com
         notify:
           success: true
-          failure: false  # Змінено на true, щоб отримувати повідомлення про невдалі збірки
+          failure: true
       app_store_connect:
         auth: integration
         submit_to_testflight: false
