@@ -3,113 +3,40 @@ workflows:
     name: iOS Native
     max_build_duration: 120
     integrations:
-      app_store_connect: FirstKey
-      app_store_connect: SecondKey
+      app_store_connect: CodeMagic Api Key
+      app_store_connect: CodeMagic Api Key Push
     environment:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.esinnur
       vars:
         BUNDLE_ID: "com.esinnur"
-        XCODE_PROJECT: "CineGorilla.xcodeproj"
-        XCODE_SCHEME: "CineGorilla"
+        XCODE_PROJECT: "CineGorilla.xcodeproj" # Убедитесь, что имя проекта указано правильно
+        XCODE_SCHEME: "CineGorilla" # Убедитесь, что имя схемы указано правильно
         APP_STORE_APPLE_ID: 6743405380
-        TEAM_ID: "K3827AC47X"
+        TEAM_ID: "K3827AC47X"  # Ваш Team ID
       xcode: 16.0
     scripts:
       - name: Set up provisioning profiles settings on Xcode project
         script: xcode-project use-profiles
 
-      - name: Синхронізація версій додатку та розширень
-        script: |
-          cd "$CM_BUILD_DIR"
-          # Отримати версію основного додатку
-          MAIN_VERSION=$(xcrun agvtool what-marketing-version -terse1 | head -n 1)
-          echo "Версія основного додатку: $MAIN_VERSION"
-          
-          # Оновити Info.plist для всіх знайдених розширень та цілей
-          find . -name "Info.plist" -type f -exec plutil -replace CFBundleShortVersionString -string "$MAIN_VERSION" {} \;
-          echo "Версії були оновлені у всіх файлах Info.plist до $MAIN_VERSION"
-
       - name: Increment build number
         script: |
           cd "$CM_BUILD_DIR"
           LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
-          echo "Останній номер збірки в App Store: $LATEST_BUILD_NUMBER"
-          NEW_BUILD_NUMBER=$(($LATEST_BUILD_NUMBER + 1))
-          echo "Новий номер збірки: $NEW_BUILD_NUMBER"
-          agvtool new-version -all $NEW_BUILD_NUMBER
-          echo "Номер збірки після інкременту:"
-          agvtool what-version
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
 
-      - name: Ручна збірка та архівування
+      - name: Build ipa for distribution
         script: |
-          cd "$CM_BUILD_DIR"
-          
-          # Створюємо файл з параметрами експорту
-          cat > exportOptions.plist << EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>method</key>
-              <string>app-store</string>
-              <key>teamID</key>
-              <string>$TEAM_ID</string>
-              <key>signingStyle</key>
-              <string>manual</string>
-              <key>provisioningProfiles</key>
-              <dict>
-                  <key>com.esinnur</key>
-                  <string>match AppStore com.esinnur</string>
-                  <key>com.esinnur.notificationsvc</key>
-                  <string>match AppStore com.esinnur.notificationsvc</string>
-              </dict>
-          </dict>
-          </plist>
-          EOF
-          
-          echo "Архівування проекту..."
-          xcodebuild clean archive \
-            -project "$XCODE_PROJECT" \
-            -scheme "$XCODE_SCHEME" \
-            -archivePath "build/ios/xcarchive/CineGorilla.xcarchive" \
-            CODE_SIGN_STYLE=Manual \
-            DEVELOPMENT_TEAM="$TEAM_ID" \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
-            -verbose
-          
-          if [ $? -eq 0 ]; then
-            echo "Архів успішно створено, експортуємо IPA..."
-            mkdir -p build/ios/ipa
-            xcodebuild -exportArchive \
-              -archivePath "build/ios/xcarchive/CineGorilla.xcarchive" \
-              -exportOptionsPlist "exportOptions.plist" \
-              -exportPath "build/ios/ipa" \
-              -verbose
-          else
-            echo "Не вдалося створити архів."
-            exit 1
-          fi
-
-      - name: Запасний метод збірки, якщо попередній не спрацював
-        script: |
-          if [ ! -f "build/ios/ipa/CineGorilla.ipa" ]; then
-            echo "Використовуємо стандартний метод збірки..."
-            xcode-project build-ipa \
-              --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
-              --scheme "$XCODE_SCHEME"
-          else
-            echo "IPA файл успішно створено попереднім методом."
-          fi
+          xcode-project build-ipa \
+            --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME"
 
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
-      - $HOME/Library/Developer/Xcode/DerivedData/Logs/Build/*.log
-      - $HOME/Library/Logs/CoreSimulator/*.log
 
     publishing:
       email:
@@ -117,7 +44,7 @@ workflows:
           - fassy363@gmail.com
         notify:
           success: true
-          failure: true
+          failure: false
       app_store_connect:
         auth: integration
         submit_to_testflight: false
