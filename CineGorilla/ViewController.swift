@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     }
     
     func firstOpen() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let onboardingScreen = Auth.auth().currentUser != nil ? MainController() : WelcomeController()
 //            let hostingController = UIHostingController(rootView: onboardingScreen)
 //            self.rootViewC(onboardingScreen)
